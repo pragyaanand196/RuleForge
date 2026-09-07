@@ -22,8 +22,9 @@ services:
   # -------------------------------------------------------------
   # React / TypeScript / Vite Frontend Static Site
   # -------------------------------------------------------------
-  - type: static
+  - type: web
     name: ruleforge-frontend
+    runtime: static
     rootDir: frontend
     buildCommand: npm install && npm run build
     publishDir: dist

@@ -9,9 +9,10 @@ def run_verification():
     with httpx.Client(base_url=BASE_URL, timeout=10.0) as client:
         # 1. Health check
         print("1. Testing Health Endpoint...")
-        r = client.get("/api/health")
+        r = client.get("/health")
         assert r.status_code == 200, f"Health check failed: {r.text}"
-        print("   ✓ Health check passed:", r.json())
+        assert r.json()["status"] == "ok"
+        print("   [OK] Health check passed:", r.json())
 
         # 2. List tasks
         print("2. Testing Task Listing...")
@@ -19,7 +20,7 @@ def run_verification():
         assert r.status_code == 200
         tasks = r.json()
         assert len(tasks) >= 8
-        print(f"   ✓ Loaded {len(tasks)} tasks successfully.")
+        print(f"   [OK] Loaded {len(tasks)} tasks successfully.")
 
         # 3. Hypothesis check
         print("3. Testing Hypothesis Evaluation...")
@@ -30,12 +31,11 @@ def run_verification():
         assert r.status_code == 200
         hypo = r.json()
         assert hypo["is_valid_attempt"] is True
-        print(f"   ✓ Hypothesis evaluated: Score {hypo['similarity_score']} - Feedback: {hypo['feedback'][:60]}...")
+        print(f"   [OK] Hypothesis evaluated: Score {hypo['similarity_score']} - Feedback: {hypo['feedback'][:60]}...")
 
         # 4. Skill Inference on task_01
         print("4. Testing Multi-Family Skill Inference...")
         task_01 = tasks[0]
-        # Get full task
         r = client.post("/api/infer", json={
             "task_id": "task_01_color_swap",
             "demonstrations": task_01["demonstrations"]
@@ -44,7 +44,7 @@ def run_verification():
         infer_res = r.json()
         assert infer_res["selected_rule"] is not None
         rule = infer_res["selected_rule"]
-        print(f"   ✓ Rule Inferred: '{rule['description']}' (Confidence: {rule['confidence'] * 100}%)")
+        print(f"   [OK] Rule Inferred: '{rule['description']}' (Confidence: {rule['confidence'] * 100}%)")
 
         # 5. Apply learned skill to novel unseen input
         print("5. Testing Novel Unseen Generalization...")
@@ -57,7 +57,7 @@ def run_verification():
         apply_res = r.json()
         assert apply_res["is_correct"] is True
         assert apply_res["cell_accuracy"] == 100.0
-        print(f"   ✓ Generalization Verified: {apply_res['cell_accuracy']}% accuracy ({apply_res['matched_cells']}/{apply_res['total_cells']} cells).")
+        print(f"   [OK] Generalization Verified: {apply_res['cell_accuracy']}% accuracy ({apply_res['matched_cells']}/{apply_res['total_cells']} cells).")
 
         # 6. Generalization sweep
         print("6. Testing Generalization Sweep across k in [1, 2, 3, 4]...")
@@ -68,18 +68,17 @@ def run_verification():
         assert r.status_code == 200
         gen_res = r.json()
         assert len(gen_res["points"]) == 4
-        print(f"   ✓ Sweep Points: {[(p['k_demos'], p['accuracy']) for p in gen_res['points']]}")
+        print(f"   [OK] Sweep Points: {[(p['k_demos'], p['accuracy']) for p in gen_res['points']]}")
 
         # 7. Ambiguity Resolution Flow
         print("7. Testing Ambiguity Resolution Flow...")
         ambig_task = next(t for t in tasks if t["id"] == "task_ambiguity_01")
-        # Underdetermined single demo
         r_ambig = client.post("/api/infer", json={
             "task_id": "task_ambiguity_01",
             "demonstrations": [ambig_task["demonstrations"][0]]
         })
         res_ambig = r_ambig.json()
-        print(f"   ✓ Ambiguity Detected on Sparse Demo: is_ambiguous={res_ambig['is_ambiguous']}, candidate count={len(res_ambig['candidate_rules'])}")
+        print(f"   [OK] Ambiguity Detected on Sparse Demo: is_ambiguous={res_ambig['is_ambiguous']}, candidate count={len(res_ambig['candidate_rules'])}")
 
         # 8. 60-Second Challenge Task
         print("8. Testing 60-Second Challenge Endpoint...")
@@ -87,7 +86,7 @@ def run_verification():
         assert r_chal.status_code == 200
         chal_task = r_chal.json()
         assert "demonstrations" in chal_task
-        print(f"   ✓ Challenge task received: {chal_task['name']} (Time limit: {chal_task['time_limit_seconds']}s)")
+        print(f"   [OK] Challenge task received: {chal_task['name']} (Time limit: {chal_task['time_limit_seconds']}s)")
 
         # 9. Semantic Reflection Rubric
         print("9. Testing Semantic Reflection Rubric Evaluation...")
@@ -97,7 +96,7 @@ def run_verification():
         assert r_ref.status_code == 200
         ref_res = r_ref.json()
         assert ref_res["score"] >= 80.0
-        print(f"   ✓ Reflection Evaluated: Score {ref_res['score']}% - Level: {ref_res['mastery_level']} - Concepts: {len(ref_res['concepts_identified'])}/5")
+        print(f"   [OK] Reflection Evaluated: Score {ref_res['score']}% - Level: {ref_res['mastery_level']} - Concepts: {len(ref_res['concepts_identified'])}/5")
 
     print("\n=== All 9 Verification Stages Passed with 100% Success! ===")
 

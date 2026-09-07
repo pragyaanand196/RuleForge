@@ -6,10 +6,12 @@ from app.data.task_loader import task_loader
 client = TestClient(app)
 
 def test_health_check():
-    response = client.get("/api/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "healthy"
+    for endpoint in ["/health", "/api/health"]:
+        response = client.get(endpoint)
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ok"
+
 
 def test_list_tasks():
     response = client.get("/api/tasks")

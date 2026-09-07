@@ -8,6 +8,8 @@ import {
   AlertTriangle, 
   Palette, 
   BrainCircuit, 
+  Zap,
+  GraduationCap,
   FileText 
 } from 'lucide-react';
 
@@ -25,8 +27,11 @@ export const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
     { id: 'ambiguity', label: '4. Ambiguity', icon: <AlertTriangle size={15} /> },
     { id: 'sandbox', label: '5. Sandbox', icon: <Palette size={15} /> },
     { id: 'bdh', label: '6. BDH-CQ', icon: <BrainCircuit size={15} /> },
-    { id: 'research', label: '7. Sources', icon: <FileText size={15} /> },
+    { id: 'challenge', label: '7. Challenge', icon: <Zap size={15} /> },
+    { id: 'reflection', label: '8. Reflection', icon: <GraduationCap size={15} /> },
+    { id: 'research', label: '9. Sources', icon: <FileText size={15} /> },
   ];
+
 
   return (
     <header className="app-header">

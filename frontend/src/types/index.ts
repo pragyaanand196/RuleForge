@@ -97,4 +97,7 @@ export type Page =
   | 'ambiguity'
   | 'sandbox'
   | 'bdh'
+  | 'challenge'
+  | 'reflection'
   | 'research';
+

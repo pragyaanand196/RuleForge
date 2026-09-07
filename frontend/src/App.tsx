@@ -8,6 +8,8 @@ import { GeneralizationPage } from './pages/GeneralizationPage';
 import { AmbiguityPage } from './pages/AmbiguityPage';
 import { SandboxPage } from './pages/SandboxPage';
 import { BDHPage } from './pages/BDHPage';
+import { ChallengePage } from './pages/ChallengePage';
+import { ReflectionPage } from './pages/ReflectionPage';
 import { ResearchPage } from './pages/ResearchPage';
 
 export const App: React.FC = () => {
@@ -22,6 +24,8 @@ export const App: React.FC = () => {
       'ambiguity',
       'sandbox',
       'bdh',
+      'challenge',
+      'reflection',
       'research',
     ];
     return validPages.includes(hash) ? hash : 'home';
@@ -59,12 +63,17 @@ export const App: React.FC = () => {
         return <SandboxPage onNavigate={navigateTo} />;
       case 'bdh':
         return <BDHPage onNavigate={navigateTo} />;
+      case 'challenge':
+        return <ChallengePage onNavigate={navigateTo} />;
+      case 'reflection':
+        return <ReflectionPage onNavigate={navigateTo} />;
       case 'research':
         return <ResearchPage onNavigate={navigateTo} />;
       default:
         return <HomePage onNavigate={navigateTo} />;
     }
   };
+
 
   return (
     <div className="app-root">

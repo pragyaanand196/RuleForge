@@ -54,9 +54,10 @@ export const BDHPage: React.FC<BDHPageProps> = ({ onNavigate }) => {
         <button className="btn btn-secondary" onClick={() => onNavigate('sandbox')}>
           <ArrowLeft size={16} /> Back to Sandbox
         </button>
-        <button className="btn btn-primary" onClick={() => onNavigate('research')}>
-          Next: Primary Sources <ArrowRight size={16} />
+        <button className="btn btn-primary" onClick={() => onNavigate('challenge')}>
+          Next: 60s Challenge <ArrowRight size={16} />
         </button>
+
       </div>
     </div>
   );

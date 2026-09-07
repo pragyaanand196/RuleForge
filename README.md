@@ -19,7 +19,7 @@ RuleForge teaches, demonstrates, tests, and challenges this scientific claim thr
 
 ## 🔬 Educational Journey & Workflow
 
-RuleForge guides learners through a clean, logical 8-stage scientific discovery workflow:
+RuleForge guides learners through a clean, logical 10-stage scientific discovery workflow:
 
 1. **Start & Overview (`#home`)**:
    - Concise 2-sentence explanation with live input $\to$ output grid preview and a single clear *"Start Experiment"* action.
@@ -42,8 +42,12 @@ RuleForge guides learners through a clean, logical 8-stage scientific discovery 
 7. **BDH-CQ Research Connection (`#bdh`)**:
    - Architectural comparison between traditional Gradient Weight Updating ($W \leftarrow W - \eta \nabla L$) and In-Context / Recurrent State Adaptation ($h_t = f(h_{t-1}, x_t; W_{\text{frozen}})$).
    - Explicit distinction between RuleForge's educational toy model and continuous neural recurrent architectures.
-8. **Primary Sources & Provenance (`#research`)**:
-   - Authoritative primary literature citations (2022–2026), asset provenance, and open-source licenses.
+8. **60-Second Challenge (`#challenge`)**:
+   - Timed zero-shot skill acquisition challenge with 60-second countdown timer and score assessment.
+9. **Conceptual Reflection (`#reflection`)**:
+   - Synthesis reflection prompt evaluated against 5-concept scientific rubric for mastery certification.
+10. **Primary Sources & Provenance (`#research`)**:
+    - Authoritative primary literature citations (2022–2026), asset provenance, and open-source licenses.
 
 ---
 
@@ -51,15 +55,16 @@ RuleForge guides learners through a clean, logical 8-stage scientific discovery 
 
 ```
 RuleForge/
+├── render.yaml                    # Render Blueprint for 1-click full-stack deployment
 ├── backend/
 │   ├── app/
-│   │   ├── main.py                # FastAPI application with CORS & health monitoring
+│   │   ├── main.py                # FastAPI app with CORS, health monitoring & routes
 │   │   ├── schemas.py             # Pydantic validation models
 │   │   ├── engine/
 │   │   │   ├── rule_base.py       # Abstract BaseRule & Grid utilities
 │   │   │   ├── color_rules.py     # Color mapping & replacement
-│   │   │   ├── geometric_rules.py # Rotations (90°, 180°, 270°) & Reflections (H, V, Diag)
-│   │   │   ├── translation_rules.py # Spatial shifts (dx, dy) & directional gravity
+│   │   │   ├── geometric_rules.py # Rotations & Reflections
+│   │   │   ├── translation_rules.py # Spatial shifts & gravity
 │   │   │   ├── pattern_rules.py   # Deletion, interior fill, border extraction, symmetry
 │   │   │   ├── counting_rules.py  # Majority color & parity rules
 │   │   │   ├── inference.py       # Multi-family hypothesis search & ambiguity detection
@@ -71,22 +76,16 @@ RuleForge/
 │   │       ├── tasks.py           # Task browsing & learner hypothesis evaluation
 │   │       ├── infer.py           # Skill inference endpoint
 │   │       ├── apply.py           # Novel test input evaluation endpoint
-│   │       └── generalize.py      # Demonstration count sweep endpoint
+│   │       ├── generalize.py      # Demonstration count sweep endpoint
+│   │       ├── challenge.py       # 60-second challenge task & evaluation
+│   │       └── reflection.py      # Self-explanation rubric evaluation
 │   ├── tests/                     # 19 passing pytest unit & integration tests
 │   ├── pytest.ini
 │   ├── requirements.txt
-│   └── run.py
+│   └── run.py                     # Configurable host/port startup
 ├── frontend/
 │   ├── src/
 │   │   ├── components/            # Reusable accessible UI components
-│   │   │   ├── Header.tsx         # Navigation & progress pills
-│   │   │   ├── GridView.tsx       # ARC grid renderer with diff highlights
-│   │   │   ├── GridEditor.tsx     # Interactive canvas drawing & palette
-│   │   │   ├── DemoViewer.tsx     # Side-by-side demonstration pair cards
-│   │   │   ├── HypothesisCard.tsx # Learner hypothesis check & inferred skill
-│   │   │   ├── PredictionViewer.tsx # Novel unseen input vs ground truth comparison
-│   │   │   ├── GeneralizationChart.tsx # Live SVG empirical curve
-│   │   │   └── BDHDiagram.tsx     # Parameter Update vs In-Context diagram
 │   │   ├── pages/                 # Full interactive educational pages
 │   │   │   ├── HomePage.tsx       # Start overview & visual preview
 │   │   │   ├── LearnPage.tsx      # 4-step conceptual foundation & mini-grid
@@ -95,12 +94,15 @@ RuleForge/
 │   │   │   ├── AmbiguityPage.tsx  # Intentional underdetermined failure lab
 │   │   │   ├── SandboxPage.tsx    # Open custom demonstration creator
 │   │   │   ├── BDHPage.tsx        # BDH-CQ research connection & comparison
+│   │   │   ├── ChallengePage.tsx  # 60-second challenge mode
+│   │   │   ├── ReflectionPage.tsx # Conceptual reflection rubric
 │   │   │   └── ResearchPage.tsx   # Primary literature library & provenance
-│   │   ├── services/api.ts        # Client API communication
-│   │   ├── styles/                # Clean academic laboratory tokens & CSS
-│   │   ├── types/index.ts         # TypeScript data types
+│   │   ├── services/api.ts        # Client API service with VITE_API_URL configuration
+│   │   ├── styles/                # Academic laboratory tokens & responsive CSS
+│   │   ├── types/index.ts         # TypeScript data types & router pages
 │   │   ├── App.tsx                # Hash-synced router & state manager
 │   │   └── main.tsx
+│   ├── .env.example               # Template environment configuration
 │   ├── index.html
 │   ├── package.json
 │   ├── tsconfig.json
@@ -112,7 +114,51 @@ RuleForge/
 
 ---
 
-## 🚀 Getting Started Locally
+## 🌐 Live Deployment (Render)
+
+RuleForge is structured for clean two-service deployment on [Render](https://render.com/):
+
+### Service 1: Frontend (Render Static Site)
+- **Service Type**: Static Site
+- **Root Directory**: `frontend`
+- **Build Command**: `npm install && npm run build` (or `npm ci && npm run build`)
+- **Publish Directory**: `dist`
+- **Routing Rewrite (SPA)**:
+  - Source: `/*`
+  - Destination: `/index.html`
+- **Environment Variables**:
+  - `VITE_API_URL`: URL of the deployed backend service (e.g. `https://ruleforge-backend.onrender.com`)
+
+### Service 2: Backend (Render Web Service)
+- **Service Type**: Web Service
+- **Runtime**: Python 3
+- **Root Directory**: `backend`
+- **Build Command**: `pip install -r requirements.txt`
+- **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+- **Health Check Path**: `/health`
+- **Environment Variables**:
+  - `FRONTEND_URL`: URL of the deployed frontend static site (e.g. `https://ruleforge-frontend.onrender.com`)
+  - `PYTHON_VERSION`: `3.11.8`
+
+> [!NOTE]
+> Vite environment variables (`VITE_API_URL`) are compiled into static assets during build time. If you update `VITE_API_URL` in Render, trigger a manual deploy / rebuild for the frontend static site.
+
+---
+
+### 🚀 1-Click Deployment via Render Blueprint (`render.yaml`)
+
+1. Push your repository to GitHub.
+2. In the Render Dashboard, click **New +** $\to$ **Blueprint**.
+3. Connect your `RuleForge` repository. Render will automatically parse [`render.yaml`](file:///c:/Users/LENOVO/Desktop/RuleForge/render.yaml) and configure both services.
+4. Once deployed:
+   - Copy the Backend Web Service URL (e.g. `https://ruleforge-backend.onrender.com`).
+   - Set `VITE_API_URL` on the Frontend Static Site to the backend URL and redeploy the frontend.
+   - Set `FRONTEND_URL` on the Backend Web Service to the frontend URL.
+5. Open the public frontend URL in your browser without any sign-in!
+
+---
+
+## 💻 Local Development Setup
 
 ### Prerequisites
 - **Python 3.10+**
@@ -120,43 +166,58 @@ RuleForge/
 
 ---
 
-### Step 1: Start the Backend API
+### Step 1: Start the Backend
 
 1. Open a terminal in the project root:
    ```bash
    cd backend
+   python -m venv .venv
    ```
-2. Install Python dependencies:
+2. Activate virtual environment:
+   - **Windows (PowerShell)**:
+     ```powershell
+     .venv\Scripts\activate
+     ```
+   - **macOS / Linux**:
+     ```bash
+     source .venv/bin/activate
+     ```
+3. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
-3. Run backend tests:
+4. Run automated test suite:
    ```bash
    python -m pytest tests -v
    ```
-4. Start the FastAPI server:
+5. Start FastAPI development server:
    ```bash
-   python run.py
+   uvicorn app.main:app --reload --port 8000
    ```
-   *Backend runs on `http://127.0.0.1:8000` (API documentation at `http://127.0.0.1:8000/docs`).*
+   *Health endpoint available at `http://localhost:8000/health` (Swagger UI at `http://localhost:8000/docs`).*
 
 ---
 
-### Step 2: Start the Frontend Application
+### Step 2: Start the Frontend
 
 1. Open a second terminal in the project root:
    ```bash
    cd frontend
    ```
-2. Install frontend dependencies:
+2. Setup local environment file:
+   - Copy `frontend/.env.example` to `frontend/.env`:
+     ```bash
+     cp .env.example .env
+     ```
+3. Install dependencies:
    ```bash
    npm install
    ```
-3. Start the development server:
+4. Start Vite development server:
    ```bash
    npm run dev
    ```
-4. Open your browser and navigate to `http://localhost:5173`.
+5. Open your browser at `http://localhost:5173`.
 
 ---
 
@@ -177,3 +238,4 @@ RuleForge/
   - Educational Dataset: CC BY 4.0
   - Typography: Google Fonts (Inter, JetBrains Mono) - SIL Open Font License
   - Icons: Lucide React - ISC License
+

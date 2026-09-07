@@ -68,9 +68,10 @@ export const ResearchPage: React.FC<ResearchPageProps> = ({ onNavigate }) => {
 
       {/* Footer Navigation */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)', paddingTop: 'var(--space-4)' }}>
-        <button className="btn btn-secondary" onClick={() => onNavigate('bdh')}>
-          <ArrowLeft size={16} /> Back to BDH-CQ
+        <button className="btn btn-secondary" onClick={() => onNavigate('reflection')}>
+          <ArrowLeft size={16} /> Back to Reflection
         </button>
+
         <button className="btn btn-primary" onClick={() => onNavigate('lab')}>
           <RotateCcw size={16} /> Repeat Experiment Lab
         </button>

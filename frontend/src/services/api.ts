@@ -10,7 +10,18 @@ import {
   ReflectionResponse
 } from '../types';
 
-const API_BASE = '/api';
+// Resolve API base URL from VITE_API_URL environment variable or fallback to '/api'
+const getApiBase = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (!envUrl) {
+    return '/api';
+  }
+  const cleanUrl = envUrl.trim().replace(/\/+$/, '');
+  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+};
+
+const API_BASE = getApiBase();
+
 
 export const apiClient = {
   async listTasks(): Promise<Task[]> {

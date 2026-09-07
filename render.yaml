@@ -1,0 +1,37 @@
+# Render Blueprint Specification for RuleForge
+# Deploy frontend (Static Site) and backend (Web Service) seamlessly.
+
+services:
+  # -------------------------------------------------------------
+  # Python / FastAPI Backend Web Service
+  # -------------------------------------------------------------
+  - type: web
+    name: ruleforge-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.8
+      - key: FRONTEND_URL
+        sync: false # Set to your deployed frontend URL (e.g. https://ruleforge-frontend.onrender.com)
+
+  # -------------------------------------------------------------
+  # React / TypeScript / Vite Frontend Static Site
+  # -------------------------------------------------------------
+  - type: static
+    name: ruleforge-frontend
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    autoDeploy: true
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        sync: false # Set to your deployed backend URL (e.g. https://ruleforge-backend.onrender.com)

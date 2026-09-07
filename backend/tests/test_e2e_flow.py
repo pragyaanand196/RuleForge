@@ -8,7 +8,8 @@ def test_full_learner_workflow():
     # 1. Health check
     r = client.get("/api/health")
     assert r.status_code == 200
-    assert r.json()["status"] == "healthy"
+    assert r.json()["status"] == "ok"
+
 
     # 2. List tasks
     r = client.get("/api/tasks")

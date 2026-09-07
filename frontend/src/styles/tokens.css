@@ -1,0 +1,74 @@
+:root {
+  /* Surface & Base Palette (Academic Laboratory Theme) */
+  --bg-main: #0c1017;
+  --bg-surface: #141b26;
+  --bg-surface-elevated: #1b2433;
+  --bg-surface-hover: #222d3f;
+  --bg-subtle: #0f1520;
+  
+  /* Borders & Dividers */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.14);
+  --border-focus: #3b82f6;
+  
+  /* Text & Typography */
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #0f172a;
+  
+  /* Scientific Accent Colors */
+  --accent-blue: #3b82f6;
+  --accent-blue-subtle: rgba(59, 130, 246, 0.15);
+  --accent-cyan: #06b6d4;
+  --accent-emerald: #10b981;
+  --accent-emerald-subtle: rgba(16, 185, 129, 0.15);
+  --accent-amber: #f59e0b;
+  --accent-amber-subtle: rgba(245, 158, 11, 0.15);
+  --accent-rose: #f43f5e;
+  --accent-rose-subtle: rgba(244, 63, 94, 0.15);
+  --accent-violet: #8b5cf6;
+
+  /* ARC Color Swatches (Standardized 0-9) */
+  --arc-0: #1e293b; /* 0: Background slate-dark */
+  --arc-1: #2563eb; /* 1: Blue */
+  --arc-2: #dc2626; /* 2: Red */
+  --arc-3: #16a34a; /* 3: Green */
+  --arc-4: #eab308; /* 4: Yellow */
+  --arc-5: #64748b; /* 5: Gray */
+  --arc-6: #d946ef; /* 6: Magenta */
+  --arc-7: #ea580c; /* 7: Orange */
+  --arc-8: #0284c7; /* 8: Azure */
+  --arc-9: #881337; /* 9: Maroon */
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Radii & Shadows */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.4);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,718 @@
+[
+  {
+    "id": "task_01_color_swap",
+    "name": "Color Transformation: Azure to Red",
+    "category": "color",
+    "difficulty": "Beginner",
+    "description": "Examine how the visual token values transform between input and output.",
+    "rule_family": "color_mapping",
+    "hidden_rule_description": "Every cell containing color 1 (blue) is replaced with color 2 (red), while background cells (0) remain untouched.",
+    "hint": "Look closely at the individual cell colors. Does the position matter, or just the color value?",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 0, 0],
+          [0, 1, 0],
+          [0, 0, 1]
+        ],
+        "output_grid": [
+          [2, 0, 0],
+          [0, 2, 0],
+          [0, 0, 2]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [0, 1, 1],
+          [1, 0, 0],
+          [0, 1, 0]
+        ],
+        "output_grid": [
+          [0, 2, 2],
+          [2, 0, 0],
+          [0, 2, 0]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [1, 1, 0],
+          [1, 1, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [2, 2, 0],
+          [2, 2, 0],
+          [0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [0, 0, 1],
+          [0, 1, 0],
+          [1, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 2],
+          [0, 2, 0],
+          [2, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [0, 1, 0],
+      [1, 0, 1],
+      [0, 1, 0]
+    ],
+    "test_output": [
+      [0, 2, 0],
+      [2, 0, 2],
+      [0, 2, 0]
+    ]
+  },
+  {
+    "id": "task_02_rotation_90",
+    "name": "Geometric Rotation: 90° Clockwise",
+    "category": "geometric",
+    "difficulty": "Beginner",
+    "description": "Observe how the spatial arrangement of shapes orients across the canvas.",
+    "rule_family": "geometric",
+    "hidden_rule_description": "The entire grid is rotated 90 degrees clockwise.",
+    "hint": "Track where the top row moves in the corresponding output.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [3, 3, 0],
+          [0, 3, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 3],
+          [0, 3, 3],
+          [0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [1, 0, 0],
+          [1, 2, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 1, 1],
+          [0, 2, 0],
+          [0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [4, 0, 0],
+          [4, 4, 4],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 4, 4],
+          [0, 4, 0],
+          [0, 4, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [0, 0, 5],
+          [0, 5, 5],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [0, 5, 0],
+          [0, 5, 5]
+        ]
+      }
+    ],
+    "test_input": [
+      [2, 2, 2],
+      [0, 0, 2],
+      [0, 0, 0]
+    ],
+    "test_output": [
+      [0, 0, 2],
+      [0, 0, 2],
+      [0, 2, 2]
+    ]
+  },
+  {
+    "id": "task_03_reflection_h",
+    "name": "Geometric Reflection: Vertical Flip",
+    "category": "geometric",
+    "difficulty": "Intermediate",
+    "description": "Analyze spatial symmetry across axes of reflection.",
+    "rule_family": "geometric",
+    "hidden_rule_description": "The entire grid is reflected vertically across the horizontal midline (top row swaps with bottom row).",
+    "hint": "Check whether top-left features remain on the left side or move to the right side.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 2, 3],
+          [0, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [0, 0, 0],
+          [1, 2, 3]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [4, 0, 4],
+          [0, 5, 0],
+          [6, 6, 6]
+        ],
+        "output_grid": [
+          [6, 6, 6],
+          [0, 5, 0],
+          [4, 0, 4]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [7, 7, 0],
+          [0, 7, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [0, 7, 0],
+          [7, 7, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [2, 0, 0],
+          [2, 2, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [2, 2, 0],
+          [2, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [3, 3, 3],
+      [3, 0, 0],
+      [0, 0, 0]
+    ],
+    "test_output": [
+      [0, 0, 0],
+      [3, 0, 0],
+      [3, 3, 3]
+    ]
+  },
+  {
+    "id": "task_04_translation_shift",
+    "name": "Spatial Shift: Translate Right",
+    "category": "translation",
+    "difficulty": "Intermediate",
+    "description": "Track the coordinate offsets of non-background objects.",
+    "rule_family": "translation",
+    "hidden_rule_description": "All foreground colored objects are shifted 1 column to the right.",
+    "hint": "Does the shape change, or does its position offset uniformly?",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 0, 0, 0],
+          [1, 1, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 1, 0, 0],
+          [0, 1, 1, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [0, 0, 0, 0],
+          [2, 2, 0, 0],
+          [2, 2, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 2, 2, 0],
+          [0, 2, 2, 0],
+          [0, 0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [0, 3, 0, 0],
+          [0, 3, 0, 0],
+          [0, 3, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 3, 0],
+          [0, 0, 3, 0],
+          [0, 0, 3, 0],
+          [0, 0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [4, 0, 0, 0],
+          [0, 0, 0, 0],
+          [4, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 4, 0, 0],
+          [0, 0, 0, 0],
+          [0, 4, 0, 0],
+          [0, 0, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [0, 0, 0, 0],
+      [5, 5, 5, 0],
+      [0, 5, 0, 0],
+      [0, 0, 0, 0]
+    ],
+    "test_output": [
+      [0, 0, 0, 0],
+      [0, 5, 5, 5],
+      [0, 0, 5, 0],
+      [0, 0, 0, 0]
+    ]
+  },
+  {
+    "id": "task_05_gravity_drop",
+    "name": "Physics Simulation: Downward Gravity",
+    "category": "translation",
+    "difficulty": "Intermediate",
+    "description": "Watch how floating elements settle across columns.",
+    "rule_family": "translation",
+    "hidden_rule_description": "All non-background cells drop down to the lowest available rows in their respective columns (downward gravity).",
+    "hint": "Check the column alignment before and after the drop.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 0, 2, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [1, 0, 2, 0]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [0, 3, 0, 4],
+          [0, 3, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 3, 0, 0],
+          [0, 3, 0, 4]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [5, 0, 0, 0],
+          [0, 6, 0, 0],
+          [0, 0, 7, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [5, 6, 7, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [1, 1, 1, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [0, 0, 0, 0],
+          [1, 1, 1, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [2, 0, 8, 0],
+      [2, 0, 0, 0],
+      [0, 4, 0, 0],
+      [0, 0, 0, 0]
+    ],
+    "test_output": [
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
+      [2, 0, 0, 0],
+      [2, 4, 8, 0]
+    ]
+  },
+  {
+    "id": "task_06_shape_interior_fill",
+    "name": "Topology: Interior Enclosure Filling",
+    "category": "pattern",
+    "difficulty": "Advanced",
+    "description": "Observe how enclosed boundaries are filled with a secondary color.",
+    "rule_family": "pattern",
+    "hidden_rule_description": "The hollow interior of any rectangular bounding box is filled with color 4 (yellow).",
+    "hint": "What happens inside the hollow perimeter versus outside?",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 1, 1],
+          [1, 0, 1],
+          [1, 1, 1]
+        ],
+        "output_grid": [
+          [1, 1, 1],
+          [1, 4, 1],
+          [1, 1, 1]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [2, 2, 2, 2],
+          [2, 0, 0, 2],
+          [2, 0, 0, 2],
+          [2, 2, 2, 2]
+        ],
+        "output_grid": [
+          [2, 2, 2, 2],
+          [2, 4, 4, 2],
+          [2, 4, 4, 2],
+          [2, 2, 2, 2]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [3, 3, 3, 3],
+          [3, 0, 0, 3],
+          [3, 3, 3, 3],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [3, 3, 3, 3],
+          [3, 4, 4, 3],
+          [3, 3, 3, 3],
+          [0, 0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [0, 0, 0, 0],
+          [0, 1, 1, 1],
+          [0, 1, 0, 1],
+          [0, 1, 1, 1]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0],
+          [0, 1, 1, 1],
+          [0, 1, 4, 1],
+          [0, 1, 1, 1]
+        ]
+      }
+    ],
+    "test_input": [
+      [8, 8, 8, 8, 8],
+      [8, 0, 0, 0, 8],
+      [8, 0, 0, 0, 8],
+      [8, 8, 8, 8, 8],
+      [0, 0, 0, 0, 0]
+    ],
+    "test_output": [
+      [8, 8, 8, 8, 8],
+      [8, 4, 4, 4, 8],
+      [8, 4, 4, 4, 8],
+      [8, 8, 8, 8, 8],
+      [0, 0, 0, 0, 0]
+    ]
+  },
+  {
+    "id": "task_07_color_deletion",
+    "name": "Filtering: Target Color Deletion",
+    "category": "pattern",
+    "difficulty": "Beginner",
+    "description": "Identify which visual elements are filtered out and which persist.",
+    "rule_family": "pattern",
+    "hidden_rule_description": "All cells of color 2 (red) are deleted (replaced with background 0), while all other colors remain unaltered.",
+    "hint": "Check which color disappears completely across all demonstrations.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 2, 0],
+          [2, 1, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [1, 0, 0],
+          [0, 1, 0],
+          [0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [2, 2, 2],
+          [0, 3, 0],
+          [2, 0, 2]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [0, 3, 0],
+          [0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [4, 2, 4],
+          [2, 4, 2],
+          [4, 2, 4]
+        ],
+        "output_grid": [
+          [4, 0, 4],
+          [0, 4, 0],
+          [4, 0, 4]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [2, 0, 0],
+          [0, 5, 2],
+          [0, 0, 2]
+        ],
+        "output_grid": [
+          [0, 0, 0],
+          [0, 5, 0],
+          [0, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [2, 1, 2],
+      [1, 2, 1],
+      [2, 1, 2]
+    ],
+    "test_output": [
+      [0, 1, 0],
+      [1, 0, 1],
+      [0, 1, 0]
+    ]
+  },
+  {
+    "id": "task_ambiguity_01",
+    "name": "Underdetermined Evidence: The Ambiguity Dilemma",
+    "category": "ambiguous",
+    "difficulty": "Advanced",
+    "description": "An intentional ambiguity laboratory: A single sparse demonstration fits multiple distinct hypotheses. Adding a counter-demonstration resolves the ambiguity.",
+    "rule_family": "color_mapping",
+    "hidden_rule_description": "True intended rule: Every cell of color 1 (blue) is converted into color 2 (red). With only 1 isolated demo at (0,0), it is underdetermined whether the rule is global color mapping or a position-specific/spatial transform.",
+    "hint": "With only Demonstration 1, can you be certain whether the rule changes ALL blue cells, or only the top-left cell? Add Demonstration 2 to prove it!",
+    "is_ambiguous": true,
+    "ambiguity_notes": "Demo 1 contains only a single blue cell at (0,0). Multiple hypotheses explain it (color mapping 1->2 vs shift vs gravity). Demo 2 contains multiple blue cells across distinct coordinates, eliminating the spatial ambiguity.",
+    "demonstrations": [
+      {
+        "id": "demo_ambig_1",
+        "label": "Demonstration 1 (Sparse / Underdetermined)",
+        "input_grid": [
+          [1, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [2, 0, 0],
+          [0, 0, 0],
+          [0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_ambig_2",
+        "label": "Demonstration 2 (Disambiguating Evidence)",
+        "input_grid": [
+          [0, 0, 1],
+          [0, 1, 0],
+          [1, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 2],
+          [0, 2, 0],
+          [2, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_ambig_3",
+        "label": "Demonstration 3 (Confirmation)",
+        "input_grid": [
+          [1, 1, 0],
+          [0, 1, 1],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [2, 2, 0],
+          [0, 2, 2],
+          [0, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [0, 1, 0],
+      [1, 0, 1],
+      [0, 1, 0]
+    ],
+    "test_output": [
+      [0, 2, 0],
+      [2, 0, 2],
+      [0, 2, 0]
+    ]
+  },
+  {
+    "id": "task_challenge_01",
+    "name": "Challenge: 180° Inversion",
+    "category": "geometric",
+    "difficulty": "Intermediate",
+    "description": "Rapid skill acquisition challenge.",
+    "rule_family": "geometric",
+    "hidden_rule_description": "The grid is rotated 180 degrees.",
+    "hint": "Check what happens to top-left versus bottom-right.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demo 1",
+        "input_grid": [
+          [1, 0, 0],
+          [0, 2, 0],
+          [0, 0, 3]
+        ],
+        "output_grid": [
+          [3, 0, 0],
+          [0, 2, 0],
+          [0, 0, 1]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demo 2",
+        "input_grid": [
+          [4, 4, 0],
+          [0, 0, 0],
+          [0, 0, 5]
+        ],
+        "output_grid": [
+          [5, 0, 0],
+          [0, 0, 0],
+          [0, 4, 4]
+        ]
+      }
+    ],
+    "test_input": [
+      [0, 6, 6],
+      [0, 0, 7],
+      [0, 0, 0]
+    ],
+    "test_output": [
+      [0, 0, 0],
+      [7, 0, 0],
+      [6, 6, 0]
+    ]
+  }
+]

@@ -248,7 +248,7 @@ To reproduce a complete scientific experiment as a reviewer:
 | Submission Item | Required File / URL | Status | Description / Notes |
 | :--- | :--- | :--- | :--- |
 | **Public Interactive Artifact** | `[YOUR_PUBLIC_ARTIFACT_URL]` | 🌐 Ready for Deployment | Deploys via `render.yaml` to Render / Vercel / Netlify with zero sign-in. |
-| **Public Source Code Repository**| `[YOUR_REPO_URL]` | 📁 Verified Local Root | Full repository containing `backend/`, `frontend/`, `research/`, and config files. |
+| **Public Source Code Repository**| `https://github.com/pragyaanand196/RuleForge` | 📁 Verified Local Root | Full repository containing `backend/`, `frontend/`, `research/`, and config files. |
 | **RuleForge Blog PDF** | `docs/RuleForge_Blog.pdf` | ⚠️ External Submission Artifact | Required submission document; to be generated and placed in `docs/` prior to final packaging. |
 | **Complete README** | `README.md` | ✅ Complete | Full documentation containing setup, reproduction, architecture, and scientific narrative. |
 | **Research Literature** | `research/papers.md` | ✅ Complete | Verified primary research papers (2022–2026) with detailed traceability matrix. |

@@ -11,6 +11,10 @@
 
 ---
 
+## 🚀 PUBLIC INTERACTIVE ARTIFACT
+
+### 👉 [OPEN THE LIVE RULEFORGE DEMO](https://ruleforge-3ags.onrender.com)
+
 ## 🎯 Central Falsifiable Claim
 
 > **“A system can acquire a previously unseen task skill from a small number of demonstrations and apply the inferred rule to a new example without updating its model parameters at inference time.”**

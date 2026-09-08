@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { InferResponse, LearnerHypothesisResponse } from '../types';
-import { Sparkles, HelpCircle, Check, AlertTriangle, ShieldCheck } from 'lucide-react';
+import { InferResponse, LearnerHypothesisResponse, HypothesisClassification } from '../types';
+import { Sparkles, HelpCircle, Check, AlertTriangle, ShieldCheck, Lightbulb, CheckCircle2, XCircle, Info } from 'lucide-react';
 
 interface HypothesisCardProps {
   taskId?: string;
@@ -11,6 +11,7 @@ interface HypothesisCardProps {
 }
 
 export const HypothesisCard: React.FC<HypothesisCardProps> = ({
+  taskId,
   onInfer,
   isLoading,
   inferResult,
@@ -19,6 +20,11 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
   const [userGuess, setUserGuess] = useState('');
   const [hypothesisFeedback, setHypothesisFeedback] = useState<LearnerHypothesisResponse | null>(null);
   const [isCheckingGuess, setIsCheckingGuess] = useState(false);
+
+  React.useEffect(() => {
+    setUserGuess('');
+    setHypothesisFeedback(null);
+  }, [taskId]);
 
   const handleCheckGuess = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,6 +38,23 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
       console.error(err);
     } finally {
       setIsCheckingGuess(false);
+    }
+  };
+
+  const getClassificationBadge = (classification: HypothesisClassification) => {
+    switch (classification) {
+      case 'correct':
+        return <span className="badge badge-green"><CheckCircle2 size={12} /> Correct Hypothesis</span>;
+      case 'partially_correct':
+        return <span className="badge badge-blue"><Info size={12} /> Partial Hypothesis</span>;
+      case 'opposite_rule':
+        return <span className="badge badge-amber"><AlertTriangle size={12} /> Opposite Orientation</span>;
+      case 'wrong_rule':
+        return <span className="badge badge-rose"><XCircle size={12} /> Incompatible Rule Family</span>;
+      case 'ambiguous':
+        return <span className="badge badge-amber"><HelpCircle size={12} /> Ambiguous Observation</span>;
+      default:
+        return <span className="badge badge-amber"><Info size={12} /> Input Recorded</span>;
     }
   };
 
@@ -49,7 +72,7 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
 
       {/* User Hypothesis Input */}
       <form onSubmit={handleCheckGuess} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-        <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+        <div style={{ display: 'flex', gap: 'var(--space-2)', flexWrap: 'wrap' }}>
           <input
             type="text"
             className="input-field"
@@ -58,6 +81,7 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
             onChange={(e) => setUserGuess(e.target.value)}
             style={{
               flex: 1,
+              minWidth: '240px',
               backgroundColor: 'var(--bg-surface-elevated)',
               border: '1px solid var(--border-default)',
               borderRadius: 'var(--radius-md)',
@@ -77,17 +101,58 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
         {hypothesisFeedback && (
           <div
             style={{
-              padding: 'var(--space-3)',
+              padding: 'var(--space-4)',
               borderRadius: 'var(--radius-md)',
-              backgroundColor: hypothesisFeedback.similarity_score >= 0.6 ? 'var(--accent-emerald-subtle)' : 'var(--bg-surface-elevated)',
-              border: '1px solid ' + (hypothesisFeedback.similarity_score >= 0.6 ? 'rgba(16, 185, 129, 0.3)' : 'var(--border-default)'),
+              backgroundColor:
+                hypothesisFeedback.classification === 'correct'
+                  ? 'var(--accent-emerald-subtle)'
+                  : hypothesisFeedback.classification === 'partially_correct'
+                  ? 'var(--accent-blue-subtle)'
+                  : hypothesisFeedback.classification === 'opposite_rule'
+                  ? 'var(--accent-amber-subtle)'
+                  : 'var(--bg-surface-elevated)',
+              border: '1px solid ' + (
+                hypothesisFeedback.classification === 'correct'
+                  ? 'rgba(16, 185, 129, 0.4)'
+                  : hypothesisFeedback.classification === 'partially_correct'
+                  ? 'rgba(59, 130, 246, 0.4)'
+                  : 'var(--border-default)'
+              ),
               fontSize: '0.85rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--space-2)',
             }}
           >
-            <div style={{ fontWeight: 600, color: hypothesisFeedback.similarity_score >= 0.6 ? '#34d399' : 'var(--text-primary)', marginBottom: 4 }}>
-              {hypothesisFeedback.similarity_score >= 0.6 ? 'Intuition Confirmed' : 'Observation Recorded'}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+              <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                Hypothesis Assessment
+              </div>
+              {getClassificationBadge(hypothesisFeedback.classification)}
             </div>
-            <p style={{ margin: 0, color: 'var(--text-secondary)' }}>{hypothesisFeedback.feedback}</p>
+
+            <p style={{ margin: 0, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+              {hypothesisFeedback.feedback}
+            </p>
+
+            {hypothesisFeedback.educational_guidance && (
+              <div
+                style={{
+                  display: 'flex',
+                  gap: 'var(--space-2)',
+                  alignItems: 'flex-start',
+                  padding: 'var(--space-2) var(--space-3)',
+                  backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px dashed var(--border-subtle)',
+                  color: '#93c5fd',
+                  fontSize: '0.8rem',
+                }}
+              >
+                <Lightbulb size={14} style={{ flexShrink: 0, marginTop: 2 }} />
+                <span><strong>Guiding Hint:</strong> {hypothesisFeedback.educational_guidance}</span>
+              </div>
+            )}
           </div>
         )}
       </form>
@@ -96,7 +161,7 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
       <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: 'var(--space-4)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
         <div>
           <div style={{ fontWeight: 600, fontSize: '0.95rem' }}>Step 2: Systematic Rule Inference</div>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Ask the rule engine to search for transformations consistent with all demonstrations.</div>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Search multi-family hypothesis space for candidate rules matching all demonstrations.</div>
         </div>
 
         <button
@@ -125,11 +190,18 @@ export const HypothesisCard: React.FC<HypothesisCardProps> = ({
               </span>
             </div>
 
-            {inferResult.selected_rule && (
-              <span className={`badge ${inferResult.is_ambiguous ? 'badge-amber' : 'badge-green'}`}>
-                Confidence: {(inferResult.selected_rule.confidence * 100).toFixed(0)}%
-              </span>
-            )}
+            <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+              {inferResult.hypothesis_space_size !== undefined && (
+                <span className="badge badge-blue">
+                  {inferResult.hypothesis_space_size} Candidate Rule{inferResult.hypothesis_space_size !== 1 ? 's' : ''}
+                </span>
+              )}
+              {inferResult.selected_rule && (
+                <span className={`badge ${inferResult.is_ambiguous ? 'badge-amber' : 'badge-green'}`}>
+                  Confidence: {(inferResult.selected_rule.confidence * 100).toFixed(0)}%
+                </span>
+              )}
+            </div>
           </div>
 
           {inferResult.selected_rule ? (

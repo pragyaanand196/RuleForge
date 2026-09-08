@@ -21,7 +21,6 @@ def run_generalization_sweep(req: GeneralizeRequest):
         all_demos.extend(task.extra_demonstrations)
 
     points: List[GeneralizationPoint] = []
-    max_k = min(len(all_demos), max(req.demonstration_counts) if req.demonstration_counts else len(all_demos))
     k_counts = sorted(list(set([k for k in (req.demonstration_counts or [1, 2, 3, 4]) if 1 <= k <= len(all_demos)])))
 
     if not k_counts:
@@ -51,17 +50,33 @@ def run_generalization_sweep(req: GeneralizeRequest):
                 accuracy=accuracy,
                 is_correct=is_correct,
                 evidence_count=len(infer_res.evidence),
-                rule_description=rule_desc
+                rule_description=rule_desc,
+                hypothesis_space_size=max(1, len(infer_res.candidate_rules)),
+                competing_count=len(infer_res.candidate_rules)
             )
         )
 
-    # Scientific takeaway
-    if all(p.is_correct for p in points[1:]):
-        takeaway = "Sufficient information in the demonstration stream rapidly collapses the hypothesis space, enabling 100% generalization to unseen inputs without requiring parameter updates."
-    elif points and points[-1].is_correct:
-        takeaway = f"Increasing demonstrations from k=1 to k={points[-1].k_demos} successfully eliminated underdetermined ambiguity, reaching {points[-1].accuracy:.1f}% generalization accuracy."
+    # Dynamically generate empirical scientific takeaway
+    first_pt = points[0] if points else None
+    last_pt = points[-1] if points else None
+
+    if first_pt and last_pt and first_pt.is_ambiguous and last_pt.is_correct and not last_pt.is_ambiguous:
+        takeaway = (
+            f"Empirical Finding: At k=1, the demonstration evidence was underdetermined ({first_pt.hypothesis_space_size} competing hypotheses). "
+            f"Adding demonstrations from k=1 to k={last_pt.k_demos} successfully eliminated alternative hypotheses, achieving {last_pt.accuracy:.1f}% generalization accuracy without parameter updates."
+        )
+    elif all(p.is_correct for p in points):
+        takeaway = (
+            f"Empirical Finding: The demonstration stream provided sufficient invariant constraints, enabling 100.0% zero-shot generalization to the novel unseen example across all evaluated demonstration counts (k={', '.join(str(p.k_demos) for p in points)})."
+        )
+    elif last_pt and last_pt.is_correct:
+        takeaway = (
+            f"Empirical Finding: Generalization accuracy improved from {first_pt.accuracy:.1f}% at k={first_pt.k_demos} to {last_pt.accuracy:.1f}% at k={last_pt.k_demos} as additional demonstrations narrowed down the candidate skill."
+        )
     else:
-        takeaway = "Demonstrations provide contextual evidence. When transformations are complex or sparse, additional diverse examples are necessary to uniquely constrain the skill."
+        takeaway = (
+            "Empirical Finding: Demonstrations provide empirical constraints on the hypothesis space. When transformations are complex or sparse, additional diverse examples are required to isolate the unique invariant rule."
+        )
 
     summary = f"Evaluated generalization across {len(points)} demonstration regimes (k={', '.join(str(p.k_demos) for p in points)})."
 

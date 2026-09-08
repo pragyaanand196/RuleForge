@@ -1,7 +1,7 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Literal
 from pydantic import BaseModel, Field
 
-# Grid representation: 2D matrix of integers (0-9 for ARC-style visual colors)
+# Grid representation: 2D matrix of integers (0-9 for visual color tokens)
 Grid = List[List[int]]
 
 class Demonstration(BaseModel):
@@ -21,7 +21,7 @@ class Task(BaseModel):
     demonstrations: List[Demonstration]
     test_input: Grid
     test_output: Grid  # Kept internal/hidden until evaluation
-    extra_demonstrations: Optional[List[Demonstration]] = None  # For generalization/ambiguity resolution sweeps
+    extra_demonstrations: Optional[List[Demonstration]] = None  # For generalization/ambiguity sweeps
     hint: Optional[str] = None
     is_ambiguous: bool = False
     ambiguity_notes: Optional[str] = None
@@ -35,10 +35,12 @@ class LearnerHypothesisResponse(BaseModel):
     feedback: str
     key_observations: List[str]
     similarity_score: float
+    classification: str = "unrelated"  # 'correct', 'partially_correct', 'opposite_rule', 'wrong_rule', 'ambiguous', 'empty_or_whitespace', 'unrelated'
+    educational_guidance: Optional[str] = None
 
 class CandidateRule(BaseModel):
     rule_id: str
-    family: str  # 'color_mapping', 'rotation', 'reflection', 'translation', 'pattern', 'counting'
+    family: str  # 'color_mapping', 'geometric', 'translation', 'pattern', 'counting'
     description: str
     parameters: Dict[str, Any]
     confidence: float
@@ -58,6 +60,8 @@ class InferResponse(BaseModel):
     ambiguity_reason: Optional[str] = None
     evidence: List[str]
     demonstration_count: int
+    hypothesis_space_size: int = 0
+    competing_hypotheses: List[str] = []
 
 class ApplyRequest(BaseModel):
     candidate_rule: CandidateRule
@@ -86,6 +90,8 @@ class GeneralizationPoint(BaseModel):
     is_correct: bool
     evidence_count: int
     rule_description: str
+    hypothesis_space_size: int = 1
+    competing_count: int = 0
 
 class GeneralizationResponse(BaseModel):
     task_id: str

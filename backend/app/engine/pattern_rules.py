@@ -1,6 +1,19 @@
-from typing import List, Dict, Any, Set, Tuple
-from .rule_base import BaseRule, grid_equals, clone_grid
+from typing import List, Dict, Any
+from .rule_base import BaseRule, grid_equals, clone_grid, is_valid_grid, grid_shape
 from ..schemas import Grid, Demonstration, CandidateRule
+
+COLOR_NAMES = {
+    0: "background (0)",
+    1: "blue (1)",
+    2: "red (2)",
+    3: "green (3)",
+    4: "yellow (4)",
+    5: "gray (5)",
+    6: "magenta (6)",
+    7: "orange (7)",
+    8: "azure (8)",
+    9: "maroon (9)"
+}
 
 class PatternRule(BaseRule):
     family_name = "pattern"
@@ -13,10 +26,8 @@ class PatternRule(BaseRule):
         W = len(grid[0])
         res = clone_grid(grid)
 
-        # Find bounding box of non-background cells
         min_r, max_r = H, -1
         min_c, max_c = W, -1
-        border_colors = set()
 
         for r in range(H):
             for c in range(W):
@@ -25,7 +36,6 @@ class PatternRule(BaseRule):
                     max_r = max(max_r, r)
                     min_c = min(min_c, c)
                     max_c = max(max_c, c)
-                    border_colors.add(grid[r][c])
 
         if max_r > min_r + 1 and max_c > min_c + 1:
             for r in range(min_r + 1, max_r):
@@ -42,7 +52,6 @@ class PatternRule(BaseRule):
         for r in range(H):
             for c in range(W):
                 if grid[r][c] != bg:
-                    # Check 4-neighbors; if any neighbor is bg or out of bounds, it's a border cell
                     is_border = False
                     for dr, dc in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
                         nr, nc = r + dr, c + dc
@@ -76,6 +85,12 @@ class PatternRule(BaseRule):
         if not demonstrations:
             return []
 
+        for demo in demonstrations:
+            if not is_valid_grid(demo.input_grid) or not is_valid_grid(demo.output_grid):
+                return []
+            if grid_shape(demo.input_grid) != grid_shape(demo.output_grid):
+                return []
+
         candidates = []
 
         # 1. Color deletion: test each color 1-9
@@ -88,7 +103,7 @@ class PatternRule(BaseRule):
                 if not grid_equals(pred, demo.input_grid):
                     has_effect = True
                 if grid_equals(pred, demo.output_grid):
-                    evidence.append(f"Demo {idx + 1}: Deleting color {color} reproduces output")
+                    evidence.append(f"Demo {idx + 1}: Deleting {COLOR_NAMES.get(color, f'color {color}')} matches output")
                 else:
                     all_match = False
                     break
@@ -98,9 +113,9 @@ class PatternRule(BaseRule):
                     CandidateRule(
                         rule_id=f"delete_color_{color}",
                         family=self.family_name,
-                        description=f"Delete color {color}: remove all cells of color {color} and replace with background (0).",
+                        description=f"Filter/Delete color: remove all {COLOR_NAMES.get(color, f'color {color}')} cells, replacing with background (0).",
                         parameters={"type": "delete_color", "color": color},
-                        confidence=0.95 if len(demonstrations) >= 2 else 0.83,
+                        confidence=0.96 if len(demonstrations) >= 2 else 0.85,
                         evidence=evidence,
                         is_consistent=True
                     )
@@ -116,7 +131,7 @@ class PatternRule(BaseRule):
                 if not grid_equals(pred, demo.input_grid):
                     has_effect = True
                 if grid_equals(pred, demo.output_grid):
-                    evidence.append(f"Demo {idx + 1}: Filling interior with color {fill_color} matches")
+                    evidence.append(f"Demo {idx + 1}: Filling interior with {COLOR_NAMES.get(fill_color, f'color {fill_color}')} matches")
                 else:
                     all_match = False
                     break
@@ -126,9 +141,9 @@ class PatternRule(BaseRule):
                     CandidateRule(
                         rule_id=f"fill_interior_{fill_color}",
                         family=self.family_name,
-                        description=f"Shape interior completion: fill hollow enclosure with color {fill_color}.",
+                        description=f"Interior enclosure completion: fill hollow bounding box interior with {COLOR_NAMES.get(fill_color, f'color {fill_color}')}.",
                         parameters={"type": "fill_interior", "fill_color": fill_color},
-                        confidence=0.93 if len(demonstrations) >= 2 else 0.81,
+                        confidence=0.95 if len(demonstrations) >= 2 else 0.83,
                         evidence=evidence,
                         is_consistent=True
                     )
@@ -155,7 +170,7 @@ class PatternRule(BaseRule):
                     family=self.family_name,
                     description="Border extraction: preserve perimeter outline and hollow out the interior.",
                     parameters={"type": "extract_border"},
-                    confidence=0.94 if len(demonstrations) >= 2 else 0.82,
+                    confidence=0.96 if len(demonstrations) >= 2 else 0.84,
                     evidence=evidence_border,
                     is_consistent=True
                 )
@@ -186,7 +201,7 @@ class PatternRule(BaseRule):
                         family=self.family_name,
                         description=desc,
                         parameters={"type": sym_type},
-                        confidence=0.93 if len(demonstrations) >= 2 else 0.80,
+                        confidence=0.95 if len(demonstrations) >= 2 else 0.82,
                         evidence=evidence_sym,
                         is_consistent=True
                     )
@@ -207,3 +222,6 @@ class PatternRule(BaseRule):
         elif rule_type == "symmetrize_horizontal":
             return self._symmetrize_horizontal(grid)
         return clone_grid(grid)
+
+    def calculate_complexity(self, parameters: Dict[str, Any]) -> float:
+        return 1.4

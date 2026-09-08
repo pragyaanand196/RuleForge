@@ -1,0 +1,309 @@
+[
+  {
+    "id": "failure_case_01_underdetermined",
+    "task_id": "task_ambiguity_01",
+    "name": "Underdetermined Evidence: The Ambiguity Dilemma",
+    "category": "underdetermined",
+    "difficulty": "Intermediate",
+    "description": "In Demo 1, only the top-left cell (0,0) changes. Multiple distinct rules fit this single example perfectly.",
+    "scientific_principle": "Sparse demonstrations underdetermine the operational invariant. Disambiguating examples are required to collapse the hypothesis space.",
+    "task": {
+      "id": "task_ambiguity_01",
+      "name": "Underdetermined Evidence: The Ambiguity Dilemma",
+      "category": "ambiguous",
+      "difficulty": "Advanced",
+      "description": "An intentional ambiguity laboratory: A single sparse demonstration fits multiple distinct hypotheses. Adding a counter-demonstration resolves the ambiguity.",
+      "rule_family": "color_mapping",
+      "hidden_rule_description": "True intended rule: Every cell of color 1 (blue) is converted into color 2 (red). With only 1 isolated demo at (0,0), it is underdetermined whether the rule is global color mapping or a position-specific/spatial transform.",
+      "hint": "With only Demonstration 1, can you be certain whether the rule changes ALL blue cells, or only the top-left cell? Add Demonstration 2 to prove it!",
+      "is_ambiguous": true,
+      "ambiguity_notes": "Demo 1 contains only a single blue cell at (0,0). Multiple hypotheses explain it (color mapping 1->2 vs shift vs gravity). Demo 2 contains multiple blue cells across distinct coordinates, eliminating the spatial ambiguity.",
+      "demonstrations": [
+        {
+          "id": "demo_ambig_1",
+          "label": "Demonstration 1 (Sparse / Underdetermined)",
+          "input_grid": [
+            [
+              1,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "output_grid": [
+            [
+              2,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        }
+      ],
+      "extra_demonstrations": [
+        {
+          "id": "demo_ambig_2",
+          "label": "Demonstration 2 (Disambiguating Evidence)",
+          "input_grid": [
+            [
+              0,
+              0,
+              1
+            ],
+            [
+              0,
+              1,
+              0
+            ],
+            [
+              1,
+              0,
+              0
+            ]
+          ],
+          "output_grid": [
+            [
+              0,
+              0,
+              2
+            ],
+            [
+              0,
+              2,
+              0
+            ],
+            [
+              2,
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "id": "demo_ambig_3",
+          "label": "Demonstration 3 (Confirmation)",
+          "input_grid": [
+            [
+              1,
+              1,
+              0
+            ],
+            [
+              0,
+              1,
+              1
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ],
+          "output_grid": [
+            [
+              2,
+              2,
+              0
+            ],
+            [
+              0,
+              2,
+              2
+            ],
+            [
+              0,
+              0,
+              0
+            ]
+          ]
+        }
+      ],
+      "test_input": [
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ]
+      ],
+      "test_output": [
+        [
+          0,
+          2,
+          0
+        ],
+        [
+          2,
+          0,
+          2
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ]
+    }
+  },
+  {
+    "id": "failure_case_02_contradictory",
+    "name": "Contradictory Demonstration Pair",
+    "category": "contradictory",
+    "difficulty": "Advanced",
+    "description": "Both demonstrations provide the exact same input grid, but specify mutually conflicting outputs.",
+    "scientific_principle": "In-context skill acquisition depends on deterministic consistency. When identical inputs yield conflicting transitions, the system must reject rather than hallucinate.",
+    "demonstrations": [
+      {
+        "id": "contra_1",
+        "label": "Demonstration 1 (Observation A)",
+        "input_grid": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "output_grid": [
+          [
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      },
+      {
+        "id": "contra_2",
+        "label": "Demonstration 2 (Direct Contradiction)",
+        "input_grid": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "output_grid": [
+          [
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "id": "failure_case_03_unsupported",
+    "name": "Arbitrary Non-Isomorphic Transformation",
+    "category": "unsupported",
+    "difficulty": "Advanced",
+    "description": "Demonstrations that cannot be explained by any of the supported rule families (Color, Geometric, Translation, Pattern, Counting).",
+    "scientific_principle": "Any learner operates within an inductive bias. When the true generation rule lies outside that hypothesis space, the system safely reports no consistent rule found.",
+    "demonstrations": [
+      {
+        "id": "unsup_1",
+        "label": "Demo 1 (Arbitrary Scatter)",
+        "input_grid": [
+          [
+            1,
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9
+          ]
+        ],
+        "output_grid": [
+          [
+            9,
+            4,
+            1
+          ],
+          [
+            2,
+            8,
+            3
+          ],
+          [
+            7,
+            6,
+            5
+          ]
+        ]
+      }
+    ]
+  }
+]

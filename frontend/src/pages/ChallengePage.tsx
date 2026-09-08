@@ -21,7 +21,6 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const timerRef = useRef<any>(null);
 
-
   // Inference & Evaluation state
   const [isInferring, setIsInferring] = useState<boolean>(false);
   const [inferResult, setInferResult] = useState<InferResponse | null>(null);
@@ -103,7 +102,7 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
       const res = await apiClient.evaluateChallenge(task.id, inferResult.selected_rule);
       setApplyResult(res);
       if (res.is_correct) {
-        setIsTimerRunning(false); // Stop timer on success
+        setIsTimerRunning(false); // Stop timer on victory
       }
     } catch (err) {
       console.error(err);
@@ -115,7 +114,7 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
 
   return (
     <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
-      {/* Header with Timer and Challenge Badge */}
+      {/* Header with Timer and Controls */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
@@ -123,7 +122,7 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
             <h1 style={{ fontSize: '2rem', margin: 0 }}>60-Second Challenge</h1>
           </div>
           <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
-            Test your speed and zero-shot reasoning. Infer the hidden skill and solve the novel example before time runs out!
+            Test rapid in-context skill acquisition under time pressure. Infer the hidden rule and generalize to the test input!
           </p>
         </div>
 
@@ -135,7 +134,7 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
           </div>
 
           <button className="btn btn-secondary" onClick={fetchNewChallenge} disabled={isLoadingTask}>
-            <RotateCcw size={16} /> New Challenge
+            <RotateCcw size={16} /> New Task
           </button>
         </div>
       </div>
@@ -171,15 +170,16 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
             gap: 'var(--space-3)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)' }}>
             <Trophy size={32} color="#34d399" />
             <div>
-              <strong style={{ fontSize: '1.1rem', color: '#34d399' }}>Challenge Completed!</strong>
+              <strong style={{ fontSize: '1.1rem', color: '#34d399' }}>Challenge Solved!</strong>
               <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                You solved the task with {timeLeft}s remaining. Zero-shot generalization confirmed!
+                You completed the skill acquisition with {timeLeft} seconds remaining. 100% Zero-shot generalization confirmed!
               </div>
             </div>
           </div>
@@ -199,13 +199,14 @@ export const ChallengePage: React.FC<ChallengePageProps> = ({ onNavigate }) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            flexWrap: 'wrap',
             gap: 'var(--space-3)',
           }}
         >
           <div>
             <strong style={{ fontSize: '1.05rem', color: '#fbbf24' }}>Time's Up!</strong>
             <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              Take your time to finish inferring and evaluating the skill below, or try a new task.
+              Complete your hypothesis and evaluation below, or click 'New Task' to try another speed run.
             </div>
           </div>
           <button className="btn btn-secondary btn-sm" onClick={fetchNewChallenge}>

@@ -42,6 +42,8 @@ export interface InferResponse {
   ambiguity_reason?: string | null;
   evidence: string[];
   demonstration_count: number;
+  hypothesis_space_size?: number;
+  competing_hypotheses?: string[];
 }
 
 export interface ApplyResponse {
@@ -63,6 +65,8 @@ export interface GeneralizationPoint {
   is_correct: boolean;
   evidence_count: number;
   rule_description: string;
+  hypothesis_space_size?: number;
+  competing_count?: number;
 }
 
 export interface GeneralizationResponse {
@@ -72,11 +76,22 @@ export interface GeneralizationResponse {
   scientific_takeaway: string;
 }
 
+export type HypothesisClassification =
+  | 'correct'
+  | 'partially_correct'
+  | 'opposite_rule'
+  | 'wrong_rule'
+  | 'ambiguous'
+  | 'empty_or_whitespace'
+  | 'unrelated';
+
 export interface LearnerHypothesisResponse {
   is_valid_attempt: boolean;
   feedback: string;
   key_observations: string[];
   similarity_score: number;
+  classification: HypothesisClassification;
+  educational_guidance?: string | null;
 }
 
 export interface ReflectionResponse {
@@ -100,4 +115,3 @@ export type Page =
   | 'challenge'
   | 'reflection'
   | 'research';
-

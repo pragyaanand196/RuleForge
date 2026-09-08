@@ -3,7 +3,7 @@ import { Page, Task, GeneralizationResponse } from '../types';
 import { apiClient } from '../services/api';
 import { GeneralizationChart } from '../components/GeneralizationChart';
 import { DemoViewer } from '../components/DemoViewer';
-import { ArrowLeft, ArrowRight, Info } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Info, TrendingUp, Layers, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 interface GeneralizationPageProps {
   onNavigate: (page: Page) => void;
@@ -15,6 +15,7 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
   const [currentTask, setCurrentTask] = useState<Task | null>(null);
   const [generalizationData, setGeneralizationData] = useState<GeneralizationResponse | null>(null);
   const [selectedK, setSelectedK] = useState<number>(3);
+  const [isLoadingSweep, setIsLoadingSweep] = useState<boolean>(false);
 
   useEffect(() => {
     async function init() {
@@ -24,7 +25,7 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
         const task = taskList.find((t) => t.id === selectedTaskId) || taskList[0];
         if (task) {
           setCurrentTask(task);
-          runSweep(task.id);
+          await runSweep(task.id);
         }
       } catch (err) {
         console.error(err);
@@ -34,6 +35,7 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
   }, []);
 
   const runSweep = async (taskId: string) => {
+    setIsLoadingSweep(true);
     try {
       const data = await apiClient.runGeneralizationSweep(taskId, [1, 2, 3, 4]);
       setGeneralizationData(data);
@@ -42,6 +44,8 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoadingSweep(false);
     }
   };
 
@@ -65,9 +69,12 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
         <div>
-          <h1 style={{ fontSize: '2rem' }}>Generalization Experiment</h1>
-          <p style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>
-            Change the number of demonstrations ($k$) to see how demonstration evidence affects generalization accuracy.
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <TrendingUp size={24} color="var(--accent-blue)" />
+            <h1 style={{ fontSize: '2rem', margin: 0 }}>Generalization Experiment</h1>
+          </div>
+          <p style={{ fontSize: '1rem', color: 'var(--text-secondary)', margin: '4px 0 0 0' }}>
+            Vary the demonstration budget ($k$) to observe empirical hypothesis space collapse and zero-shot test accuracy.
           </p>
         </div>
 
@@ -103,18 +110,19 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
       <div className="card card-elevated" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-5)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
           <div>
-            <h3 style={{ fontSize: '1.1rem' }}>Number of Available Demonstrations</h3>
+            <h3 style={{ fontSize: '1.1rem' }}>Demonstration Budget ($k$)</h3>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: 0 }}>
-              Select how many input-output pairs the rule inference engine receives.
+              Select how many input-output demonstration pairs the inference engine receives.
             </p>
           </div>
 
           <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
-            {[1, 2, 3, 4].map((k) => (
+            {(generalizationData?.points.map((p) => p.k_demos) || [1, 2, 3, 4]).map((k) => (
               <button
                 key={k}
                 className={`btn ${selectedK === k ? 'btn-primary' : 'btn-secondary'}`}
                 onClick={() => setSelectedK(k)}
+                disabled={isLoadingSweep}
               >
                 k = {k}
               </button>
@@ -145,9 +153,9 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
               alignItems: 'center',
             }}
           >
-            <Info size={16} color="var(--accent-blue)" style={{ flexShrink: 0 }} />
+            <Info size={18} color="var(--accent-blue)" style={{ flexShrink: 0 }} />
             <span>
-              <strong>Finding:</strong> {generalizationData.scientific_takeaway}
+              <strong>Empirical Takeaway:</strong> {generalizationData.scientific_takeaway}
             </span>
           </div>
         )}
@@ -155,12 +163,21 @@ export const GeneralizationPage: React.FC<GeneralizationPageProps> = ({ onNaviga
 
       {/* Active Demonstration Stream at selectedK */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h3 style={{ fontSize: '1.1rem' }}>Demonstrations Provided to Engine (k = {selectedK})</h3>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
+            <Layers size={18} color="var(--accent-blue)" />
+            <h3 style={{ fontSize: '1.1rem', margin: 0 }}>Demonstrations Provided to Engine (k = {selectedK})</h3>
+          </div>
           {activePoint && (
-            <span className={`badge ${activePoint.is_correct ? 'badge-green' : 'badge-amber'}`}>
-              Accuracy: {activePoint.accuracy}%
-            </span>
+            <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'center' }}>
+              <span className="badge badge-blue">
+                {activePoint.hypothesis_space_size || 1} Candidate Hypotheses
+              </span>
+              <span className={`badge ${activePoint.is_correct ? 'badge-green' : 'badge-amber'}`}>
+                {activePoint.is_correct ? <CheckCircle2 size={12} /> : <AlertTriangle size={12} />}
+                Test Accuracy: {activePoint.accuracy}%
+              </span>
+            </div>
           )}
         </div>
 

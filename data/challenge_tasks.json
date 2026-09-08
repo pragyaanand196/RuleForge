@@ -1,0 +1,286 @@
+[
+  {
+    "id": "task_challenge_01",
+    "name": "Challenge: 180\u00c2\u00b0 Inversion",
+    "category": "geometric",
+    "difficulty": "Intermediate",
+    "description": "Rapid skill acquisition challenge.",
+    "rule_family": "geometric",
+    "hidden_rule_description": "The entire grid is rotated 180 degrees.",
+    "hint": "Check what happens to top-left versus bottom-right.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demo 1",
+        "input_grid": [
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            3
+          ]
+        ],
+        "output_grid": [
+          [
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            1
+          ]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demo 2",
+        "input_grid": [
+          [
+            4,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            5
+          ]
+        ],
+        "output_grid": [
+          [
+            5,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            4
+          ]
+        ]
+      }
+    ],
+    "test_input": [
+      [
+        0,
+        6,
+        6
+      ],
+      [
+        0,
+        0,
+        7
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_output": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        7,
+        0,
+        0
+      ],
+      [
+        6,
+        6,
+        0
+      ]
+    ]
+  },
+  {
+    "id": "task_challenge_02",
+    "name": "Challenge: Parity Color Switch",
+    "category": "counting",
+    "difficulty": "Advanced",
+    "description": "Rapid parity counting skill acquisition.",
+    "rule_family": "counting",
+    "hidden_rule_description": "If the count of non-background cells is even, fill canvas with green (3); if odd, fill canvas with red (2).",
+    "hint": "Count how many non-zero cells exist in the input.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demo 1",
+        "input_grid": [
+          [
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "output_grid": [
+          [
+            3,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3
+          ]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demo 2",
+        "input_grid": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "output_grid": [
+          [
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2
+          ],
+          [
+            2,
+            2,
+            2
+          ]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demo 3",
+        "input_grid": [
+          [
+            4,
+            4,
+            4
+          ],
+          [
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0
+          ]
+        ],
+        "output_grid": [
+          [
+            3,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3
+          ],
+          [
+            3,
+            3,
+            3
+          ]
+        ]
+      }
+    ],
+    "test_input": [
+      [
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0
+      ]
+    ],
+    "test_output": [
+      [
+        2,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        2
+      ]
+    ]
+  }
+]

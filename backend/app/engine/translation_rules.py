@@ -1,5 +1,5 @@
 from typing import List, Dict, Any
-from .rule_base import BaseRule, grid_equals, clone_grid
+from .rule_base import BaseRule, grid_equals, clone_grid, is_valid_grid, grid_shape
 from ..schemas import Grid, Demonstration, CandidateRule
 
 class TranslationRule(BaseRule):
@@ -32,7 +32,6 @@ class TranslationRule(BaseRule):
 
         if direction == "down":
             for c in range(W):
-                # collect all non-bg items from bottom to top
                 items = [grid[r][c] for r in range(H) if grid[r][c] != bg]
                 for i, val in enumerate(reversed(items)):
                     res[H - 1 - i][c] = val
@@ -57,41 +56,61 @@ class TranslationRule(BaseRule):
         if not demonstrations:
             return []
 
+        # Validate grids
+        for demo in demonstrations:
+            if not is_valid_grid(demo.input_grid) or not is_valid_grid(demo.output_grid):
+                return []
+            if grid_shape(demo.input_grid) != grid_shape(demo.output_grid):
+                return []
+
         candidates = []
 
-        # 1. Test discrete rigid shifts: dr in [-2, -1, 0, 1, 2], dc in [-2, -1, 0, 1, 2]
+        # 1. Test discrete rigid shifts
         shift_directions = {
-            (0, 1): "Shift foreground objects 1 cell right",
-            (0, -1): "Shift foreground objects 1 cell left",
-            (1, 0): "Shift foreground objects 1 cell down",
-            (-1, 0): "Shift foreground objects 1 cell up",
-            (1, 1): "Shift foreground objects 1 cell down-right",
-            (-1, 1): "Shift foreground objects 1 cell up-right",
-            (1, -1): "Shift foreground objects 1 cell down-left",
-            (-1, -1): "Shift foreground objects 1 cell up-left",
-            (0, 2): "Shift foreground objects 2 cells right",
-            (2, 0): "Shift foreground objects 2 cells down",
+            (0, 1): "Shift all foreground objects 1 cell right",
+            (0, -1): "Shift all foreground objects 1 cell left",
+            (1, 0): "Shift all foreground objects 1 cell down",
+            (-1, 0): "Shift all foreground objects 1 cell up",
+            (1, 1): "Shift all foreground objects 1 cell down-right",
+            (-1, 1): "Shift all foreground objects 1 cell up-right",
+            (1, -1): "Shift all foreground objects 1 cell down-left",
+            (-1, -1): "Shift all foreground objects 1 cell up-left",
+            (0, 2): "Shift all foreground objects 2 cells right",
+            (0, -2): "Shift all foreground objects 2 cells left",
+            (2, 0): "Shift all foreground objects 2 cells down",
+            (-2, 0): "Shift all foreground objects 2 cells up",
         }
 
         for (dr, dc), desc in shift_directions.items():
             all_match = True
             evidence = []
+            has_spatial_movement = False
+
             for idx, demo in enumerate(demonstrations):
                 pred = self._shift(demo.input_grid, dr, dc)
+                if not grid_equals(pred, demo.input_grid):
+                    has_spatial_movement = True
+
                 if grid_equals(pred, demo.output_grid):
-                    evidence.append(f"Demo {idx + 1}: Spatial shift ({dr:+d} row, {dc:+d} col) matches")
+                    evidence.append(f"Demo {idx + 1}: Spatial offset ({dr:+d} row, {dc:+d} col) matches")
                 else:
                     all_match = False
                     break
             
             if all_match and evidence:
+                confidence = 0.94 if has_spatial_movement else 0.40
+                if len(demonstrations) >= 2 and has_spatial_movement:
+                    confidence = 0.98
+                elif len(demonstrations) == 1 and has_spatial_movement:
+                    confidence = 0.82
+
                 candidates.append(
                     CandidateRule(
                         rule_id=f"shift_{dr}_{dc}",
                         family=self.family_name,
                         description=desc,
                         parameters={"type": "shift", "dr": dr, "dc": dc},
-                        confidence=0.92 if len(demonstrations) >= 2 else 0.80,
+                        confidence=confidence,
                         evidence=evidence,
                         is_consistent=True
                     )
@@ -99,17 +118,22 @@ class TranslationRule(BaseRule):
 
         # 2. Test Gravity directions
         gravity_dirs = [
-            ("down", "Gravity: drop all non-zero cells to the bottom floor"),
-            ("up", "Gravity: float all non-zero cells to the top ceiling"),
-            ("right", "Gravity: slide all non-zero cells to the right wall"),
-            ("left", "Gravity: slide all non-zero cells to the left wall"),
+            ("down", "Downward Gravity: drop all non-background cells to the floor"),
+            ("up", "Upward Gravity: float all non-background cells to the ceiling"),
+            ("right", "Rightward Gravity: slide all non-background cells to the right wall"),
+            ("left", "Leftward Gravity: slide all non-background cells to the left wall"),
         ]
 
         for direction, desc in gravity_dirs:
             all_match = True
             evidence = []
+            has_gravity_settle = False
+
             for idx, demo in enumerate(demonstrations):
                 pred = self._gravity(demo.input_grid, direction)
+                if not grid_equals(pred, demo.input_grid):
+                    has_gravity_settle = True
+
                 if grid_equals(pred, demo.output_grid):
                     evidence.append(f"Demo {idx + 1}: {desc} matches output")
                 else:
@@ -117,13 +141,19 @@ class TranslationRule(BaseRule):
                     break
 
             if all_match and evidence:
+                confidence = 0.95 if has_gravity_settle else 0.40
+                if len(demonstrations) >= 2 and has_gravity_settle:
+                    confidence = 0.99
+                elif len(demonstrations) == 1 and has_gravity_settle:
+                    confidence = 0.84
+
                 candidates.append(
                     CandidateRule(
                         rule_id=f"gravity_{direction}",
                         family=self.family_name,
                         description=desc,
                         parameters={"type": "gravity", "direction": direction},
-                        confidence=0.94 if len(demonstrations) >= 2 else 0.82,
+                        confidence=confidence,
                         evidence=evidence,
                         is_consistent=True
                     )
@@ -137,3 +167,8 @@ class TranslationRule(BaseRule):
             return self._gravity(grid, parameters.get("direction", "down"))
         else:
             return self._shift(grid, parameters.get("dr", 0), parameters.get("dc", 0))
+
+    def calculate_complexity(self, parameters: Dict[str, Any]) -> float:
+        if parameters.get("type") == "gravity":
+            return 1.3
+        return 1.2

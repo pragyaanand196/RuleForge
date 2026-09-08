@@ -597,6 +597,271 @@
     ]
   },
   {
+    "id": "task_08_symmetry_vertical",
+    "name": "Bilateral Symmetry: Vertical Axis Mirror",
+    "category": "pattern",
+    "difficulty": "Intermediate",
+    "description": "Observe how features on the left side are mirrored onto the right side to create vertical bilateral symmetry.",
+    "rule_family": "pattern",
+    "hidden_rule_description": "The left half of the grid is mirrored across the vertical midline onto the right half.",
+    "hint": "Compare the left two columns with the right two columns in the output.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 0, 0, 0],
+          [2, 3, 0, 0],
+          [0, 4, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [1, 0, 0, 1],
+          [2, 3, 3, 2],
+          [0, 4, 4, 0],
+          [0, 0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [5, 5, 0, 0],
+          [0, 6, 0, 0],
+          [7, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [5, 5, 5, 5],
+          [0, 6, 6, 0],
+          [7, 0, 0, 7],
+          [0, 0, 0, 0]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [0, 1, 0, 0],
+          [1, 1, 0, 0],
+          [1, 0, 0, 0],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 1, 1, 0],
+          [1, 1, 1, 1],
+          [1, 0, 0, 1],
+          [0, 0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [2, 0, 0, 0],
+          [0, 3, 0, 0],
+          [0, 0, 0, 0],
+          [4, 4, 0, 0]
+        ],
+        "output_grid": [
+          [2, 0, 0, 2],
+          [0, 3, 3, 0],
+          [0, 0, 0, 0],
+          [4, 4, 4, 4]
+        ]
+      }
+    ],
+    "test_input": [
+      [3, 0, 0, 0],
+      [3, 3, 0, 0],
+      [0, 5, 0, 0],
+      [0, 0, 0, 0]
+    ],
+    "test_output": [
+      [3, 0, 0, 3],
+      [3, 3, 3, 3],
+      [0, 5, 5, 0],
+      [0, 0, 0, 0]
+    ]
+  },
+  {
+    "id": "task_09_counting_majority",
+    "name": "Statistical Voting: Majority Color Dominance",
+    "category": "counting",
+    "difficulty": "Intermediate",
+    "description": "Count the frequency of each non-background color. The dominant color takes over the entire grid.",
+    "rule_family": "counting",
+    "hidden_rule_description": "The entire canvas is filled with whichever non-background color appears most frequently in the input grid.",
+    "hint": "Count how many cells of each color exist in the input.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 1, 2],
+          [1, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [1, 1, 1],
+          [1, 1, 1],
+          [1, 1, 1]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [3, 4, 4],
+          [0, 4, 4],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [4, 4, 4],
+          [4, 4, 4],
+          [4, 4, 4]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [6, 6, 6],
+          [7, 7, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [6, 6, 6],
+          [6, 6, 6],
+          [6, 6, 6]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [2, 2, 2],
+          [2, 5, 5],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [2, 2, 2],
+          [2, 2, 2],
+          [2, 2, 2]
+        ]
+      }
+    ],
+    "test_input": [
+      [8, 8, 8],
+      [8, 8, 1],
+      [1, 0, 0]
+    ],
+    "test_output": [
+      [8, 8, 8],
+      [8, 8, 8],
+      [8, 8, 8]
+    ]
+  },
+  {
+    "id": "task_10_border_extraction",
+    "name": "Perimeter Extraction: Hollow Outline",
+    "category": "pattern",
+    "difficulty": "Advanced",
+    "description": "Extract the outer perimeter boundary of filled visual objects while hollowing out the interior.",
+    "rule_family": "pattern",
+    "hidden_rule_description": "Preserve all perimeter border cells that touch the background or grid boundary, while replacing completely enclosed interior cells with background 0.",
+    "hint": "Check which cells survive on the edge versus the interior.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demonstration 1",
+        "input_grid": [
+          [1, 1, 1],
+          [1, 1, 1],
+          [1, 1, 1]
+        ],
+        "output_grid": [
+          [1, 1, 1],
+          [1, 0, 1],
+          [1, 1, 1]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demonstration 2",
+        "input_grid": [
+          [2, 2, 2, 2],
+          [2, 2, 2, 2],
+          [2, 2, 2, 2],
+          [2, 2, 2, 2]
+        ],
+        "output_grid": [
+          [2, 2, 2, 2],
+          [2, 0, 0, 2],
+          [2, 0, 0, 2],
+          [2, 2, 2, 2]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demonstration 3",
+        "input_grid": [
+          [0, 0, 0, 0, 0],
+          [0, 3, 3, 3, 0],
+          [0, 3, 3, 3, 0],
+          [0, 3, 3, 3, 0],
+          [0, 0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [0, 0, 0, 0, 0],
+          [0, 3, 3, 3, 0],
+          [0, 3, 0, 3, 0],
+          [0, 3, 3, 3, 0],
+          [0, 0, 0, 0, 0]
+        ]
+      }
+    ],
+    "extra_demonstrations": [
+      {
+        "id": "demo_4",
+        "label": "Demonstration 4",
+        "input_grid": [
+          [4, 4, 4, 4],
+          [4, 4, 4, 4],
+          [4, 4, 4, 4],
+          [0, 0, 0, 0]
+        ],
+        "output_grid": [
+          [4, 4, 4, 4],
+          [4, 0, 0, 4],
+          [4, 4, 4, 4],
+          [0, 0, 0, 0]
+        ]
+      }
+    ],
+    "test_input": [
+      [5, 5, 5, 5, 5],
+      [5, 5, 5, 5, 5],
+      [5, 5, 5, 5, 5],
+      [5, 5, 5, 5, 5],
+      [0, 0, 0, 0, 0]
+    ],
+    "test_output": [
+      [5, 5, 5, 5, 5],
+      [5, 0, 0, 0, 5],
+      [5, 0, 0, 0, 5],
+      [5, 5, 5, 5, 5],
+      [0, 0, 0, 0, 0]
+    ]
+  },
+  {
     "id": "task_ambiguity_01",
     "name": "Underdetermined Evidence: The Ambiguity Dilemma",
     "category": "ambiguous",
@@ -671,7 +936,7 @@
     "difficulty": "Intermediate",
     "description": "Rapid skill acquisition challenge.",
     "rule_family": "geometric",
-    "hidden_rule_description": "The grid is rotated 180 degrees.",
+    "hidden_rule_description": "The entire grid is rotated 180 degrees.",
     "hint": "Check what happens to top-left versus bottom-right.",
     "is_ambiguous": false,
     "demonstrations": [
@@ -713,6 +978,71 @@
       [0, 0, 0],
       [7, 0, 0],
       [6, 6, 0]
+    ]
+  },
+  {
+    "id": "task_challenge_02",
+    "name": "Challenge: Parity Color Switch",
+    "category": "counting",
+    "difficulty": "Advanced",
+    "description": "Rapid parity counting skill acquisition.",
+    "rule_family": "counting",
+    "hidden_rule_description": "If the count of non-background cells is even, fill canvas with green (3); if odd, fill canvas with red (2).",
+    "hint": "Count how many non-zero cells exist in the input.",
+    "is_ambiguous": false,
+    "demonstrations": [
+      {
+        "id": "demo_1",
+        "label": "Demo 1",
+        "input_grid": [
+          [1, 0, 1],
+          [0, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [3, 3, 3],
+          [3, 3, 3],
+          [3, 3, 3]
+        ]
+      },
+      {
+        "id": "demo_2",
+        "label": "Demo 2",
+        "input_grid": [
+          [1, 1, 1],
+          [0, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [2, 2, 2],
+          [2, 2, 2],
+          [2, 2, 2]
+        ]
+      },
+      {
+        "id": "demo_3",
+        "label": "Demo 3",
+        "input_grid": [
+          [4, 4, 4],
+          [4, 0, 0],
+          [0, 0, 0]
+        ],
+        "output_grid": [
+          [3, 3, 3],
+          [3, 3, 3],
+          [3, 3, 3]
+        ]
+      }
+    ],
+    "test_input": [
+      [5, 5, 5],
+      [5, 5, 0],
+      [0, 0, 0]
+    ],
+    "test_output": [
+      [2, 2, 2],
+      [2, 2, 2],
+      [2, 2, 2]
     ]
   }
 ]
